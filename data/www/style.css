@@ -1,5 +1,13 @@
 @import url("themes.css");
 
+@font-face {
+  font-family: "Nunito";
+  src: url("Nunito-Regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 /* WEBUI THEMES */
 /* Every colour the WebUI uses is declared here.  A theme is a short list of overrides rather than a second
    stylesheet.  The palette is organised in FAMILIES: a head (`--fills`, `--infotexts`, ...) holds the one colour and
@@ -95,7 +103,7 @@
 html, body { margin: 0; padding: 0; height: 100%; }
 /* The theme colours the app, not the browser window. */
 html { background: var(--page-bg); }
-body { background: var(--page-bg); color: var(--main-text); font-family: Times, "Times New Roman", serif; font-size: 16px; }
+body { background: var(--page-bg); color: var(--main-text); font-family: "Nunito", sans-serif; font-size: 16px; }
 *, *::before, *::after { box-sizing: border-box; scrollbar-width: thin; user-select: none; }
 a { color: var(--link-text); text-decoration: none; font-weight: bold }
 @media (hover: hover) and (pointer: fine) { /* mouse only */ a:hover { text-decoration: underline } }
@@ -110,7 +118,7 @@ h2.pagetitle { line-height: 48px; margin: 5px 0 5px 0 }
 
 /* LOGO */
 #logo { flex: 1; display: flex; justify-content: center; height: 86px; box-sizing: border-box; }
-#logo svg { width:130px; height: 86px; }
+#logo svg { width:250px; height: 86px; }
 #logo.ls { margin: 10px 0 0 0; flex: 0; }
 #logo.ls svg { width:100px; height: auto; }
 path#eh { fill: var(--logo); fill: url(#logo-gradient) #fff; stroke: var(--logo); }
@@ -260,7 +268,7 @@ input[type=range] { overflow: hidden; border: solid 2px var(--meter-outline); bo
 #pleditorcontent .grabbable { touch-action: none; }
 .pleitem { display: flex; background: var(--panel-background); width: 100%; }
 .pleitem span { display: flex; flex-direction: column; justify-content: center; text-align: right; color: var(--editor-cell-text); width: 40px; padding: 0 8px; font-size: 14px; border: var(--editor-grid) 1px solid; }
-.pleitem input { font-family: Times, "Times New Roman", serif; background: var(--panel-background); color: var(--list-names); height: 32px; line-height: 32px; text-indent: 8px;
+.pleitem input { font-family: inherit; background: var(--panel-background); color: var(--list-names); height: 32px; line-height: 32px; text-indent: 8px;
   font-size: 20px; border: var(--editor-grid) 1px solid; font-weight: normal; margin-top: 4px; border-radius: 0px; outline: none; margin: 0; padding: 1px 2px; width: auto; }
 .plecheck { width: 30px!important; }
 .plecheck input { line-height: 10px; height: auto; }
@@ -342,17 +350,17 @@ section .reset svg.fill{ fill: var(--panel-border); stroke: none; width: 22px; }
 .search-row .searchtextinput { flex-grow: 1; }
 .search-row .searchtextinput.select { flex-grow: 0; }
 table, tr, td { margin: 0; padding: 0; }
-.searchbutton { font-family: Helvatica, Arial, Sans; padding: 4px; font-size: 18px; border: var(--button-outline) 2px solid; font-weight: normal; box-sizing: border-box; border-radius: 20px; cursor: pointer; text-align: center; min-width: 120px; color: var(--button-text); background: var(--button-fill); }
+.searchbutton { font-family: inherit; padding: 4px; font-size: 18px; border: var(--button-outline) 2px solid; font-weight: normal; box-sizing: border-box; border-radius: 20px; cursor: pointer; text-align: center; min-width: 120px; color: var(--button-text); background: var(--button-fill); }
 @media (hover: hover) and (pointer: fine) { /* mouse only */ .searchbutton:hover { background: var(--button-active-fill); color: var(--button-active-text); text-decoration: none; } }
 .searchbutton:active { position: relative; top: 2px; }
 .quicksearches { display: flex; justify-content: space-evenly; width: 100%; padding: 0 2px; margin: 0 0 4px 0; box-sizing: border-box; }
 .quicksearchtable { width: 100%; padding: 0; margin: 0; text-align: center; border-spacing: 1px; }
-.quicksearch { cursor: pointer; color: var(--link-quiet); width: 100%; text-align: center; border: none; background-color: var(--panel-background); font-family: Times, "Times New Roman", serif; font-size: 16px; padding: 0px; margin: 0px; min-width: 80px; }
+.quicksearch { cursor: pointer; color: var(--link-quiet); width: 100%; text-align: center; border: none; background-color: var(--panel-background); font-family: inherit; font-size: 16px; padding: 0px; margin: 0px; min-width: 80px; }
 @media (hover: hover) and (pointer: fine) { /* mouse only */ .quicksearch:hover { text-decoration: underline; color: var(--link-text); } }
 .searchbutton.search.plus, .searchbutton.search.minus { margin-top: 0px; width: 22px; max-width: 22px; min-width: 22px; height: 22px; font-size: 22px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
 .searchbutton.search.plus svg, .searchbutton.search.minus svg { width: 16px; height: 16px; stroke: var(--icons-outline); stroke-width: 4px; fill: none; stroke-linecap: round; stroke-linejoin: round; }
 @media (hover: hover) and (pointer: fine) { /* mouse only */  .searchbutton.search.plus:hover svg, .searchbutton.search.minus:hover svg { stroke: var(--button-active-text); } }
-.sort-row { font-family: Times, "Times New Roman", serif; font-size: 16px; font-weight: bold; display: flex; justify-content: space-between; width: 100%; margin: 4px 0 4px 0; }
+.sort-row { font-family: inherit; font-size: 16px; font-weight: bold; display: flex; justify-content: space-between; width: 100%; margin: 4px 0 4px 0; }
 .sort-row label { padding: 0 2px; margin: 0; cursor: pointer; }
 .sort-row input[type="radio"] { margin-right: 10px; cursor: pointer; }
 #searches .searchtextinput { margin: 0; width: 100%; box-sizing: border-box; background: var(--input-fill); color: var(--input-text); padding: 6px 6px; font-size: 16px; border: var(--input-border) 1px solid; font-weight: normal; box-sizing: border-box; border-radius: 4px; min-height: 32px; }
@@ -415,16 +423,16 @@ table.stations .importantmessage { color: var(--heading-text) !important; font-s
 #updateform label input:checked ~ .checkmark:after { display: block; }
 #updateform label .checkmark:after { top: 6px; left: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--switch-thumb); }
 #updateform .rowinput { display: flex; width: 100%; }
-#updateform input[type=file] {color: var(--main-text); font-size: 16px; font-family: Times, "Times New Roman", serif; flex: 1; }
+#updateform input[type=file] {color: var(--main-text); font-size: 16px; font-family: inherit; flex: 1; }
 #updateform input[type=file]::file-selector-button { padding: 8px 8px; font-size: 18px; border: var(--button-outline) 2px solid; font-weight: normal; box-sizing: border-box;
-  border-radius: 20px; cursor: pointer; text-align: center; min-width: 120px; margin-right: 20px; color: var(--button-text); background: var(--button-fill); font-family: Times, "Times New Roman", serif; }
+  border-radius: 20px; cursor: pointer; text-align: center; min-width: 120px; margin-right: 20px; color: var(--button-text); background: var(--button-fill); font-family: inherit; }
 @media (hover: hover) and (pointer: fine) { /* mouse only */ #updateform input[type=file]::file-selector-button:hover { color: var(--button-fill); background: var(--button-outline); } }
-#updateform .fb { margin: 0; font-family: Times, "Times New Roman", serif; }
+#updateform .fb { margin: 0; font-family: inherit; }
 #updateprogress { background-color: var(--meter-track); border: var(--meter-outline) 2px solid; height: 30px; border-radius: 15px; width: 100%; margin: 0; overflow: hidden; }
 #updateprogress::-webkit-progress-bar { overflow: hidden; background-color: var(--meter-track); border-radius: 15px; }
 #updateprogress::-webkit-progress-value { background-color: var(--meter-fill); border-radius: 15px 0 0 15px; }
 #updateprogress::-moz-progress-bar { background-color: var(--meter-fill); border-radius: 15px; }
-.onlineupdatebutton { max-width: 100%; width: 100%; margin: 0; font-family: Times, "Times New Roman", serif; }
+.onlineupdatebutton { max-width: 100%; width: 100%; margin: 0; font-family: inherit; }
 .fb.tool { padding: 4px 12px; font-size: 14px; font-weight: normal; min-width: 100px; margin-top: 30px; }
 body.switching .gb, body.switching #playlist { opacity: 0.5; pointer-events: none; }
 @keyframes spinner { 0% { transform: rotate(0deg);  } 100% { transform: rotate(360deg); } }
@@ -433,7 +441,7 @@ body.switching .gb, body.switching #playlist { opacity: 0.5; pointer-events: non
 /* IR RECORDER */
 #irwrap { display: flex; align-items: center; flex: 1; max-width: 480px; margin: 0 auto; }
 #irremote { display: grid; grid-template-columns: 1fr 1fr 1fr; grid-column-gap: 8px; grid-row-gap: 8px; border-radius: 20px; border: #555555 2px solid; background-color: #111111; box-sizing: border-box; padding: 12px; }
-.irbutton { font-family: Helvatica, Arial, Sans; width: 54px; height: 54px; border-radius: 27px; border: #555555 3px solid; box-sizing: border-box; font-size: 24px; font-weight: bold; color: #e8ece8; background-color: #010101; display: flex; justify-content: center; align-items: center; cursor: pointer; user-select: none; }
+.irbutton { font-family: inherit; width: 54px; height: 54px; border-radius: 27px; border: #555555 3px solid; box-sizing: border-box; font-size: 24px; font-weight: bold; color: #e8ece8; background-color: #010101; display: flex; justify-content: center; align-items: center; cursor: pointer; user-select: none; }
 .irbutton svg { width: 20px; fill: #e8ece8;  stroke: none; }
 .irbutton.blue { background-color: #2648a9; border-color: #3356ba; color: #e8ece8; }
 .irbutton.red { background-color: #d31b20; border-color: #e53a3e; color: #e8ece8; }
@@ -446,7 +454,7 @@ body.switching .gb, body.switching #playlist { opacity: 0.5; pointer-events: non
 #irform { flex: 1; text-align: center; padding-left: 20px; }
 #irstartrecord h3 { font-size: 20px; font-weight: bold; color: var(--heading-text); }
 #irrecordtitle { padding-left: 42px; margin-bottom: 6px; }
-#irrecordtitle span { background-color: var(--icons-outline); color: var(--panel-background); width: 40px; height: 40px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-family: Helvatica, Arial, Sans; font-size: 18px; margin-left: 8px; border: var(--panel-border) 2px solid; }
+#irrecordtitle span { background-color: var(--icons-outline); color: var(--panel-background); width: 40px; height: 40px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-family: inherit; font-size: 18px; margin-left: 8px; border: var(--panel-border) 2px solid; }
 #irrecordtitle span svg { fill: var(--panel-background); width: 16px; }
 #irrecordcaption { padding-left: 42px; font-size: 16px; line-height: 21px; min-height: 21px; margin-bottom: 16px; color: var(--caption-text); }
 .irrecordrow { display: flex; margin-bottom: 20px; position: relative; }
