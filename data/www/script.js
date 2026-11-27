@@ -572,6 +572,23 @@ function setCurrentItem(item){
   playlist.querySelectorAll('li').forEach((item, index)=>{ item.attr('class','play'); if(index+1==currentItem){ item.classList.add("active"); topPos = item.offsetTop; lih = item.offsetHeight; } });
   playlist.scrollTo({ top: (topPos-playlist.offsetHeight/2+lih/2), left: 0, behavior: 'smooth' });
 }
+function updatePLEditorColumnSizing(){
+  const editor = getId('pleditor');
+  const ple = getId('pleditorcontent');
+  const nameInput = ple && ple.querySelector('.plename');
+  const headerName = getId('pleheader') && getId('pleheader').querySelector('.plename');
+  if(!editor || !ple || (!nameInput && !headerName)) return;
+  const style = getComputedStyle(nameInput || headerName);
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  if(context) context.font = style.font;
+  const measure = value => context ? context.measureText(value).width : value.length * parseFloat(style.fontSize) * 0.6;
+  let nameWidth = 80, urlWidth = 120;
+  ple.querySelectorAll('.plename').forEach(input => { nameWidth = Math.max(nameWidth, measure(input.value) + 52); });
+  ple.querySelectorAll('.pleurl').forEach(input => { urlWidth = Math.max(urlWidth, measure(input.value) + 16); });
+  editor.style.setProperty('--ple-name-grow', nameWidth.toFixed(2));
+  editor.style.setProperty('--ple-url-grow', urlWidth.toFixed(2));
+}
 function initPLEditor(){
   ple= getId('pleditorcontent');
   if(!ple) return;
@@ -592,6 +609,9 @@ function initPLEditor(){
   if(!ple._dbcutBound){
     ple._dbcutBound = true;
     ple.addEventListener('input', (ev)=>{
+      if(ev.target.classList && (ev.target.classList.contains('plename') || ev.target.classList.contains('pleurl'))) updatePLEditorColumnSizing();
+    });
+    ple.addEventListener('input', (ev)=>{
       const el = ev.target;
       if(!el.classList || !el.classList.contains('pledbcut')) return;
       const li = el.closest('.pleitem');
@@ -606,6 +626,7 @@ function initPLEditor(){
     });
   }
   ple.innerHTML=html;
+  updatePLEditorColumnSizing();
 }
 function handlePlaylistData(fileData) {
   const ul = getId('playlist');
@@ -713,6 +734,7 @@ function plAdd(){
       <input class="pleinput pledbcut" type="number" min="0" max="24" step="1" placeholder="?" value="0" />\
       <span class="pleinput plestatus"></span>';
   ple.appendChild(plitem);
+  updatePLEditorColumnSizing();
   ple.scrollTo({
     top: ple.scrollHeight,
     left: 0,
@@ -800,6 +822,7 @@ function plRemove(){
   for (let i = 0; i <= items.length-1; i++) {
     items[i].getElementsByTagName('span')[0].innerText=("00"+(i+1)).slice(-3);
   }
+  updatePLEditorColumnSizing();
   uncheckSelectAll();
 }
 function submitPlaylist(){
@@ -851,12 +874,14 @@ function doPlImportCurated(localPath, mode) {
       if (importMode === 'replace') {
         // Clear existing playlist
         getId('pleditorcontent').innerHTML = '';
+        updatePLEditorColumnSizing();
       }
       if (isJSON) {
         parseAndAddJSON(content, addStationToEditor, importMode);
       } else {
         parseAndAddCSV(content, addStationToEditor, importMode);
       }
+      updatePLEditorColumnSizing();
       uncheckSelectAll();
     })
     .catch(error => {
@@ -881,12 +906,14 @@ function doPlImport(finput) {
     if (mode === 'replace') {
       // Clear existing playlist
       getId('pleditorcontent').innerHTML = '';
+      updatePLEditorColumnSizing();
     }
     if (isJSON) {
       parseAndAddJSON(content, addStationToEditor, mode);
     } else {
       parseAndAddCSV(content, addStationToEditor, mode);
     }
+    updatePLEditorColumnSizing();
     
     finput.value = '';
     delete window.importMode;
@@ -1387,7 +1414,12 @@ function updateGearIcon(){
 }
 function setValidateButton(running){
   const b = getId('plvalidatebtn'); if(!b) return;
-  b.textContent = running ? t('btn_cancel') : t('btn_pl_validate', 'Check All Streams');
+  const label = running ? t('btn_cancel', 'Cancel') : t('btn_pl_validate', 'Check All Streams');
+  b.title = label;
+  b.querySelector('.icon-label').textContent = label;
+  b.querySelector('svg').innerHTML = running
+    ? '<path d="M6 6h12v12H6z"/>'
+    : '<path d="m4 6 2 2 4-4M12 7h8M4 14l2 2 4-4m2 3h8"/>';
 }
 function clearValidationStatus(){
   // rows only: the header has .plestatus too
@@ -1495,7 +1527,9 @@ function hideSpinner(){
 }
 function loadLogoThen(callback){
   fetch(`logo.svg`).then(response => response.text()).then(svg => {
-    getId('logo').innerHTML = svg;
+    const logo = getId('logo');
+    logo.innerHTML = svg;
+    logo.style.cursor = 'pointer';
     if (typeof callback === 'function') callback();
   });
 }
@@ -1624,6 +1658,7 @@ function continueLoading(mode){
   document.body.addEventListener('click', (event) => {
     let target = event.target.closest('div, span, li');
     if (!target) return; // Exit early if no matching element found
+    if (target.id === 'logo') { window.location.href = `http://${hostname}/`; return; }
     if(target.classList.contains("knob")) target = target.parentElement;
     //if(target.classList.contains("snfknob")) target = target.parentElement;
     if(target.parentElement.classList.contains("play")){ playItem(target.parentElement); return; }

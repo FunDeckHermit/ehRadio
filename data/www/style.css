@@ -232,6 +232,9 @@ input[type=range] { overflow: hidden; border: solid 2px var(--meter-outline); bo
 .fb { padding: 8px 22px; font-size: 16px; border: var(--button-outline) 2px solid; font-weight: normal; border-radius: 20px; cursor: pointer;
       text-align: center; min-width: 100px; margin-left: 8px; margin-right: 8px; color: var(--button-text); background: var(--button-fill);
       touch-action: manipulation; }
+.formbuttons .fb.icon-button { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; width: 44px; height: 44px; padding: 8px; }
+.formbuttons .icon-button svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.icon-label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 @media (hover: hover) and (pointer: fine) { /* mouse only */ .fb:hover { background: var(--button-active-fill); color: var(--button-active-text); text-decoration: none; } }
 /* A touch screen has no hover, so a button that changes something stays lit for a moment after the press
    (script.js adds and removes the class).  Deliberately outside the hover query: the effect must work there. */
@@ -272,8 +275,8 @@ input[type=range] { overflow: hidden; border: solid 2px var(--meter-outline); bo
   font-size: 20px; border: var(--editor-grid) 1px solid; font-weight: normal; margin-top: 4px; border-radius: 0px; outline: none; margin: 0; padding: 1px 2px; width: auto; }
 .plecheck { width: 30px!important; }
 .plecheck input { line-height: 10px; height: auto; }
-.plename { flex: 13 1 0; min-width: 80px; }
-.pleurl { flex: 7 1 0; min-width: 40px; color: var(--list-urls)!important; }
+.plename { flex: var(--ple-name-grow, 1) 1 0; min-width: 80px; }
+.pleurl { flex: var(--ple-url-grow, 1) 1 0; min-width: 120px; color: var(--list-urls)!important; }
 .pledbcut { width: 53px; font-size: 16px!important; }
 .pleitem span.pleplay { width: 32px!important; padding: 0; text-align: center; font-size: 12px!important; cursor: pointer; }
 @media (hover: hover) and (pointer: fine) { /* mouse only */
@@ -539,8 +542,8 @@ body.sdman #progresstext.upload #progresspct { font-size: 200%; }
   .pleitem span { width: 2.5em; padding: 0 0.5em; font-size: 14px; }
   .pleitem span.pleplay { width: 28px!important; height: 28px; font-size: 16px!important; }
   .plecheck { width: 30px!important;  }
-  .plename { width: auto!important; flex: 5 1 0!important; min-width: 80px!important; }
-  .pleurl { width: auto!important; flex: 2 1 0!important; min-width: 40px!important; }
+  .plename { width: auto!important; flex: var(--ple-name-grow, 1) 1 0!important; min-width: 80px!important; }
+  .pleurl { width: auto!important; flex: var(--ple-url-grow, 1) 1 0!important; min-width: 60px!important; }
   .pledbcut { width: 3.5em!important; font-size: 14px!important; }
   #previewinfo { line-height: 20px; height: 20px; font-size: 14px; text-align: center; color: var(--caption-text); margin-bottom: 4px; }
   /* SD MANAGER */
@@ -646,8 +649,8 @@ body.sdman #progresstext.upload #progresspct { font-size: 200%; }
   #irremote .irbutton { width: 42px; height: 42px; font-size: 19px; line-height: 38px; }
   #playerwrap, #pleditorwrap { padding-bottom: 20px; }
   #copy { font-size: 16px; padding-top: 10px; padding-bottom: 10px; }
-  .plename { flex: 5 1 0!important; }
-  .pleurl { flex: 3 1 0!important; }
+  .plename { flex: var(--ple-name-grow, 1) 1 0!important; }
+  .pleurl { flex: var(--ple-url-grow, 1) 1 0!important; }
   .searchtitle1 { font-size: 28px; }
   .searchtitle2 { font-size: 14px; }
   .quicksearchtable { border-spacing: 2px; }
@@ -682,8 +685,8 @@ body.sdman #progresstext.upload #progresspct { font-size: 200%; }
   #irremote .irbutton { width: 44px; height: 44px; font-size: 20px; line-height: 40px; }
   #playerwrap, #pleditorwrap { padding-bottom: 20px; }
   #copy { font-size: 16px; padding-top: 10px; padding-bottom: 10px; }
-  .plename { flex: 7 1 0!important; }
-  .pleurl { flex: 4 1 0!important; }
+  .plename { flex: var(--ple-name-grow, 1) 1 0!important; }
+  .pleurl { flex: var(--ple-url-grow, 1) 1 0!important; }
   .searchtitle1 { font-size: 28px; }
   .searchtitle2 { font-size: 14px; }
   .quicksearchtable { border-spacing: 2px; }

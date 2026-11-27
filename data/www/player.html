@@ -181,16 +181,16 @@
     <ol id="pleditorcontent">
     </ol><!--pleditorcontent-->
     <div class="formbuttons">
-      <div class="fb local pl-editor-only" data-command="pladd" data-i18n="btn_pl_add">Add</div>
-      <div class="fb local" data-command="pldel" data-i18n="btn_pl_remove">Remove</div>
-      <div id="plvalidatebtn" class="fb local pl-validator-only" data-command="plvalidate" data-i18n="btn_pl_validate">Check All Streams</div>
-      <label class="fb pl-editor-only" data-name="plreplace" onclick="triggerImport('replace')" data-i18n="btn_pl_replace">Replace</label>
-      <label class="fb pl-editor-only" data-name="plmerge" onclick="triggerImport('merge')" data-i18n="btn_pl_merge">Merge</label>
+      <div class="fb local icon-button pl-editor-only" data-command="pladd" data-i18n="btn_pl_add" title="Add" aria-labelledby="pladd-label"><svg viewBox="0 0 24 24" class="stroke" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span id="pladd-label" class="icon-label" data-i18n="btn_pl_add">Add</span></div>
+      <div class="fb local icon-button" data-command="pldel" data-i18n="btn_pl_remove" title="Remove" aria-labelledby="pldel-label"><svg viewBox="0 0 24 24" class="stroke" aria-hidden="true"><path d="M4 7h16M10 11v6m4-6v6M5 7l1 14h12l1-14M9 7V4h6v3"/></svg><span id="pldel-label" class="icon-label" data-i18n="btn_pl_remove">Remove</span></div>
+      <div id="plvalidatebtn" class="fb local icon-button pl-validator-only" data-command="plvalidate" data-i18n="btn_pl_validate" title="Check All Streams" aria-labelledby="plvalidate-label"><svg viewBox="0 0 24 24" class="stroke" aria-hidden="true"><path d="m4 6 2 2 4-4M12 7h8M4 14l2 2 4-4m2 3h8"/></svg><span id="plvalidate-label" class="icon-label" data-i18n="btn_pl_validate">Check All Streams</span></div>
+      <label class="fb icon-button pl-editor-only" data-name="plreplace" onclick="triggerImport('replace')" data-i18n="btn_pl_replace" title="Replace" aria-labelledby="plreplace-label"><svg viewBox="0 0 24 24" class="stroke" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M5.6 9A7 7 0 0 1 18 6l2 2M4 16l2 2a7 7 0 0 0 12.4-3"/></svg><span id="plreplace-label" class="icon-label" data-i18n="btn_pl_replace">Replace</span></label>
+      <label class="fb icon-button pl-editor-only" data-name="plmerge" onclick="triggerImport('merge')" data-i18n="btn_pl_merge" title="Merge" aria-labelledby="plmerge-label"><svg viewBox="0 0 24 24" class="stroke" aria-hidden="true"><path d="M12 3v18M5 10l7-7 7 7M5 14l7 7 7-7"/></svg><span id="plmerge-label" class="icon-label" data-i18n="btn_pl_merge">Merge</span></label>
       <input id="file-upload" type="file" accept=".txt, .csv, .json" onchange="doPlImport(this)" hidden/>
-      <div class="fb local pl-editor-only" data-command="plexport" data-i18n="btn_export">Export</div>
-      <div class="fb local pl-editor-only" data-command="plshare" data-i18n="btn_share">Share</div>
-      <div class="fb local" data-command="plsubmit" data-i18n="btn_save">Save</div>
-      <div class="fb local" data-command="plundo" data-i18n="btn_pl_undo">Undo</div>
+      <div class="fb local icon-button pl-editor-only" data-command="plexport" data-i18n="btn_export" title="Export" aria-labelledby="plexport-label"><svg viewBox="0 0 24 24" class="stroke" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M5 17v4h14v-4"/></svg><span id="plexport-label" class="icon-label" data-i18n="btn_export">Export</span></div>
+      <div class="fb local icon-button pl-editor-only" data-command="plshare" data-i18n="btn_share" title="Share" aria-labelledby="plshare-label"><svg viewBox="0 0 24 24" class="stroke" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4m-6.6 7 6.6 4.4"/></svg><span id="plshare-label" class="icon-label" data-i18n="btn_share">Share</span></div>
+      <div class="fb local icon-button" data-command="plsubmit" data-i18n="btn_save" title="Save" aria-labelledby="plsave-label"><svg viewBox="0 0 24 24" class="stroke" aria-hidden="true"><path d="M5 3h12l4 4v14H3V3h2zm2 0v6h10V3M7 21v-8h10v8"/></svg><span id="plsave-label" class="icon-label" data-i18n="btn_save">Save</span></div>
+      <div class="fb local icon-button" data-command="plundo" data-i18n="btn_pl_undo" title="Undo" aria-labelledby="plundo-label"><svg viewBox="0 0 24 24" class="stroke" aria-hidden="true"><path d="M9 14 4 9l5-5M4 9h10a6 6 0 0 1 0 12h-2"/></svg><span id="plundo-label" class="icon-label" data-i18n="btn_pl_undo">Undo</span></div>
     </div>
   </div><!--pleditor-->
 </div><!--pleditorwrap-->
