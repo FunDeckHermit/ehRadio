@@ -4,7 +4,7 @@ var hostname = window.location.hostname;
 var modesd = false;
 const query = window.location.search;
 const params = new URLSearchParams(query);
-const Title = 'ehRadio';
+const Title = 'PetRonics Radio';
 if(params.size>0){
   if(params.has('host')) hostname=params.get('host');
 }

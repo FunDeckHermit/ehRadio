@@ -1139,7 +1139,7 @@ or examine the examples in builds/trip5 and make your own!
   //#define OTA_PASS "myotapassword12345"
 #endif
 #ifndef AP_SSID // name of hotspot in AP Mode
-  #define AP_SSID "ehRadio"
+  #define AP_SSID "PetRonics Radio"
 #endif
 #ifdef AP_PASSWORD
   #if (AP_PASSWORD)[0] == '\0' // if it's empty, undefine
