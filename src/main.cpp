@@ -36,6 +36,8 @@ SET_LOOP_TASK_STACK_SIZE(LOOP_TASK_STACK_SIZE * 1024);
 static constexpr uint32_t MAIN_LOOP_STALL_MS = MAIN_LOOP_STALL * 1000;
 
 size_t psramFrameBufferBytes = 0;   // set by subsystems, read by Core Monitor
+static uint32_t startupPlaybackDeadline = 0;
+static bool startupPlaybackPending = false;
 
 #ifdef CORE_MONITOR
   // The counters themselves are declared in displays/tools/dspstats.h
@@ -66,6 +68,7 @@ static void bootPsramSnapshot(const char* tag) {
 }
 
 void setup() {
+  startupPlaybackPending = true;
   #if !defined(ARDUINO_USB_CDC_ON_BOOT) && ARDUINO_USB_CDC_ON_BOOT
     Serial.setTxBufferSize(4096); // activate ring-buffer
   #endif
@@ -174,18 +177,8 @@ void setup() {
   if (config.getMode()==PM_SDCARD) player.initHeaders(config.station.url);
   BOOTTIMELOG("player.initHeaders");
   player.lockOutput=false;
-  if (!startup.safeMode() && config.store.smartstart) {  // If smart start is enabled (suppressed on a safe-mode boot)
-    delay(1000);  // Allow DNS/TCP/SSL stack to stabilize after WiFi connect (esp. after soft restart)
-    if (config.getMode() == PM_WEB) {
-      player.resumeLastWebSource();
-    } else {
-      uint16_t stn = config.lastStation();
-      if (stn > 0) {  // Only play if there's a valid station
-        player.sendCommand({PR_PLAY, stn});
-      }
-    }
-  }
-  BOOTTIMELOG("smartstart (incl. 1s settle)");
+  startupPlaybackDeadline = millis();
+  BOOTTIMELOG("startup playback scheduled");
   if (network.status != SDOFFLINE) startup.startupServices();  // needs WiFi — skip in offline SD mode
   bootHeapSnapshot("after-services");
   BOOTTIMELOG("startupServices kickoff");
@@ -238,6 +231,17 @@ void loop() {
     config.processDeferredSaves();
   }
   const uint32_t tStage4 = micros();
+
+  if (startupPlaybackPending && (int32_t)(millis() - startupPlaybackDeadline) >= 0 &&
+      (network.status == CONNECTED || network.status == SDOFFLINE)) {
+    startupPlaybackPending = false;
+    if (config.getMode() == PM_WEB) {
+      if (config.store.countStation > 0) player.sendCommand({PR_PLAY, 1});
+    } else {
+      const uint16_t stn = config.lastStation();
+      if (stn > 0) player.sendCommand({PR_PLAY, stn});
+    }
+  }
 
   startup.loop();
   const uint32_t tStage5 = micros();

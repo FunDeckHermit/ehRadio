@@ -110,6 +110,7 @@ void Config::loadPreferences() {
     }
     prefs.end();
     setDefaults();
+    store.bootStableMarker = true; // A fresh configuration is not an interrupted boot
     return;
   }
   CONFIGTIMELOG("prefs.begin & sentinel");
@@ -392,8 +393,9 @@ void Config::initPlaylistMode() {
       uint16_t found = utility.findStationByUrl(store.lastStationUrl);
       if (found > 0) {
         _lastStation = found;  // Resolved from persisted URL
+      } else {
+        _lastStation = 1;      // First boot: start the first available web station
       }
-      // else: stays 0 — will fall through to "ehRadio" below
     } else {
       _lastStation = _randomStation();  // SD mode: pick a random track
     }

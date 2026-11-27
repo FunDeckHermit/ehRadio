@@ -60,6 +60,7 @@
 
 /* --- Peripherals and Build Options --- */
 #define RGB_LED_PIN          48
+#define LED_PIN              2
 
 /* --- User Defaults --- */
 #define DSP_LOCALE           "nl_NL"
