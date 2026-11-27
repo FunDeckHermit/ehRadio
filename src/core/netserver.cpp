@@ -578,7 +578,7 @@ void NetServer::processQueue() {
         getPlaylist(clientId); break;
       }
       case GETACTIVE: {
-          #define DBGWUI false // set true to debug WebUI
+          #define DBGWUI true // set true to debug WebUI
           String act = F("\"group_wifi\",");
           if (network.status == CONNECTED) {
                                                                 act += F("\"group_system\",");
