@@ -32,7 +32,14 @@ private:
   unsigned long lastCycle;
   uint8_t cycleState;
   rgb_state_e state;
+  bool stationAnimationActive;
+  uint16_t animationStationId;
+  uint16_t lastStationId;
+  uint8_t animationHue;
+  unsigned long stationAnimationStart;
+  unsigned long lastAnimationChange;
   void setStationColors(uint16_t stationId);
+  void setAnimationColor(uint8_t hue);
 };
 
 #else
