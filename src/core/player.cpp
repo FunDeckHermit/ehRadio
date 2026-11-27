@@ -624,7 +624,7 @@ void Player::_play(uint16_t stationId) {
       if (config.getMode()==PM_WEB && !network.lostPlaying) radioBrowserSendClick(config.station.url);
     #endif
     network.lostPlaying = false;  // Clear flag - we're playing again!
-    rgbled.playing();
+    rgbled.playing(stationId);
     backlightControls.restart();
   } else {
     // Self-healing: if the SD file vanished, the index no longer describes the card, so a re-index is owed.

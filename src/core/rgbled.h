@@ -18,7 +18,7 @@ public:
   void init();
   bool isInitialized();
   void set(uint8_t r, uint8_t g, uint8_t b);
-  void playing();
+  void playing(uint16_t stationId = 0);
   void stopped();
   void trackChange();
   void loop();
@@ -32,6 +32,7 @@ private:
   unsigned long lastCycle;
   uint8_t cycleState;
   rgb_state_e state;
+  void setStationColors(uint16_t stationId);
 };
 
 #else
@@ -41,7 +42,7 @@ public:
   void init() {}
   bool isInitialized() { return false; }
   void set(uint8_t, uint8_t, uint8_t) {}
-  void playing() {}
+  void playing(uint16_t = 0) {}
   void stopped() {}
   void trackChange() {}
   void loop() {}

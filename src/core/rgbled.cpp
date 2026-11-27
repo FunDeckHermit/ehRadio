@@ -2,6 +2,10 @@
 
 #if defined(RGB_LED_PIN) && (RGB_LED_PIN!=255) // ============================== Everything ignored if not defined ==============================
 
+static void writeDiscreteRgb(uint8_t pin, uint8_t brightness) {
+  analogWrite(pin, 255 - brightness);
+}
+
 RgbLed::RgbLed()
   : strip(NUM_RGB_LEDS, RGB_LED_PIN, RGB_LED_ORDER + NEO_KHZ800),
     flashCount(0), lastFlash(0), inited(false),
@@ -11,6 +15,17 @@ void RgbLed::init() {
   strip.begin();
   strip.setBrightness(64);
   strip.show();
+  #if defined(DISCRETE_RGB1_R) && defined(DISCRETE_RGB1_G) && defined(DISCRETE_RGB1_B) && \
+      defined(DISCRETE_RGB2_R) && defined(DISCRETE_RGB2_G) && defined(DISCRETE_RGB2_B) && \
+      defined(DISCRETE_RGB3_R) && defined(DISCRETE_RGB3_G) && defined(DISCRETE_RGB3_B)
+    const uint8_t pins[] = {DISCRETE_RGB1_R, DISCRETE_RGB1_G, DISCRETE_RGB1_B,
+                            DISCRETE_RGB2_R, DISCRETE_RGB2_G, DISCRETE_RGB2_B,
+                            DISCRETE_RGB3_R, DISCRETE_RGB3_G, DISCRETE_RGB3_B};
+    for (uint8_t pin : pins) {
+      pinMode(pin, OUTPUT);
+      writeDiscreteRgb(pin, 5);
+    }
+  #endif
   inited = true;
 }
 
@@ -21,14 +36,67 @@ void RgbLed::set(uint8_t r, uint8_t g, uint8_t b) {
   strip.show();
 }
 
-void RgbLed::playing() {
+void RgbLed::playing(uint16_t stationId) {
   state = RGB_PLAYING;
   if (!cycle) set(0, 128, 0);
+  if (stationId > 0) setStationColors(stationId);
+  else {
+    #if defined(DISCRETE_RGB1_R) && defined(DISCRETE_RGB1_G) && defined(DISCRETE_RGB1_B) && \
+        defined(DISCRETE_RGB2_R) && defined(DISCRETE_RGB2_G) && defined(DISCRETE_RGB2_B) && \
+        defined(DISCRETE_RGB3_R) && defined(DISCRETE_RGB3_G) && defined(DISCRETE_RGB3_B)
+      const uint8_t pins[] = {DISCRETE_RGB1_R, DISCRETE_RGB1_G, DISCRETE_RGB1_B,
+                              DISCRETE_RGB2_R, DISCRETE_RGB2_G, DISCRETE_RGB2_B,
+                              DISCRETE_RGB3_R, DISCRETE_RGB3_G, DISCRETE_RGB3_B};
+      for (uint8_t pin : pins) writeDiscreteRgb(pin, 255);
+    #endif
+  }
 }
 
 void RgbLed::stopped() {
   state = RGB_STOPPED;
   if (!cycle) set(128, 0, 0);
+  #if defined(DISCRETE_RGB1_R) && defined(DISCRETE_RGB1_G) && defined(DISCRETE_RGB1_B) && \
+      defined(DISCRETE_RGB2_R) && defined(DISCRETE_RGB2_G) && defined(DISCRETE_RGB2_B) && \
+      defined(DISCRETE_RGB3_R) && defined(DISCRETE_RGB3_G) && defined(DISCRETE_RGB3_B)
+    const uint8_t pins[] = {DISCRETE_RGB1_R, DISCRETE_RGB1_G, DISCRETE_RGB1_B,
+                            DISCRETE_RGB2_R, DISCRETE_RGB2_G, DISCRETE_RGB2_B,
+                            DISCRETE_RGB3_R, DISCRETE_RGB3_G, DISCRETE_RGB3_B};
+    for (uint8_t pin : pins) writeDiscreteRgb(pin, 5);
+  #endif
+}
+
+void RgbLed::setStationColors(uint16_t stationId) {
+  #if defined(DISCRETE_RGB1_R) && defined(DISCRETE_RGB1_G) && defined(DISCRETE_RGB1_B) && \
+      defined(DISCRETE_RGB2_R) && defined(DISCRETE_RGB2_G) && defined(DISCRETE_RGB2_B) && \
+      defined(DISCRETE_RGB3_R) && defined(DISCRETE_RGB3_G) && defined(DISCRETE_RGB3_B)
+    const uint16_t stationIndex = stationId - 1;
+    const uint16_t grayCode = stationIndex ^ (stationIndex >> 1);
+    const uint8_t grayPosition = grayCode & 0x03;
+    const uint8_t distinctLed = grayPosition == 1 ? 1 : (grayPosition == 3 ? 2 : (grayPosition == 2 ? 1 : 0));
+    const uint8_t sharedColor = stationIndex % 6;
+    const uint8_t distinctColor = (sharedColor + 3) % 6;
+    const uint8_t red[] =   {255, 0, 0, 0, 255, 255};
+    const uint8_t green[] = {0, 255, 0, 255, 0, 255};
+    const uint8_t blue[] =  {0, 0, 255, 255, 255, 0};
+    const uint8_t colors[] = {
+      distinctLed == 0 ? distinctColor : sharedColor,
+      distinctLed == 1 ? distinctColor : sharedColor,
+      distinctLed == 2 ? distinctColor : sharedColor
+    };
+    const uint8_t redPins[] = {DISCRETE_RGB1_R, DISCRETE_RGB2_R};
+    const uint8_t greenPins[] = {DISCRETE_RGB1_G, DISCRETE_RGB2_G};
+    const uint8_t bluePins[] = {DISCRETE_RGB1_B, DISCRETE_RGB2_B};
+    for (uint8_t led = 0; led < 2; led++) {
+      writeDiscreteRgb(redPins[led], red[colors[led]]);
+      writeDiscreteRgb(greenPins[led], green[colors[led]]);
+      writeDiscreteRgb(bluePins[led], blue[colors[led]]);
+    }
+    writeDiscreteRgb(DISCRETE_RGB3_R, red[colors[2]]);
+    writeDiscreteRgb(DISCRETE_RGB3_G, green[colors[2]]);
+    writeDiscreteRgb(DISCRETE_RGB3_B, blue[colors[2]]);
+  #else
+    (void)stationId;
+  #endif
 }
 
 void RgbLed::trackChange() {
