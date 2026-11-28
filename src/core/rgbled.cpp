@@ -1,9 +1,11 @@
 #include "rgbled.h"
+#include <driver/gpio.h>
+#include <esp_rom_gpio.h>
 
 #if defined(RGB_LED_PIN) && (RGB_LED_PIN!=255) // ============================== Everything ignored if not defined ==============================
 
 static void writeDiscreteRgb(uint8_t pin, uint8_t brightness) {
-  analogWrite(pin, 255 - brightness);
+  digitalWrite(pin, (brightness >= 128) ? LOW : HIGH);
 }
 
 RgbLed::RgbLed()
@@ -24,8 +26,10 @@ void RgbLed::init() {
                             DISCRETE_RGB2_R, DISCRETE_RGB2_G, DISCRETE_RGB2_B,
                             DISCRETE_RGB3_R, DISCRETE_RGB3_G, DISCRETE_RGB3_B};
     for (uint8_t pin : pins) {
+      esp_rom_gpio_pad_select_gpio(pin);
+      gpio_reset_pin((gpio_num_t)pin);
       pinMode(pin, OUTPUT);
-      writeDiscreteRgb(pin, 5);
+      writeDiscreteRgb(pin, 0);
     }
   #endif
   inited = true;
@@ -75,7 +79,7 @@ void RgbLed::stopped() {
     const uint8_t pins[] = {DISCRETE_RGB1_R, DISCRETE_RGB1_G, DISCRETE_RGB1_B,
                             DISCRETE_RGB2_R, DISCRETE_RGB2_G, DISCRETE_RGB2_B,
                             DISCRETE_RGB3_R, DISCRETE_RGB3_G, DISCRETE_RGB3_B};
-    for (uint8_t pin : pins) writeDiscreteRgb(pin, 5);
+    for (uint8_t pin : pins) writeDiscreteRgb(pin, 0);
   #endif
 }
 
@@ -117,18 +121,15 @@ void RgbLed::setAnimationColor(uint8_t hue) {
   #if defined(DISCRETE_RGB1_R) && defined(DISCRETE_RGB1_G) && defined(DISCRETE_RGB1_B) && \
       defined(DISCRETE_RGB2_R) && defined(DISCRETE_RGB2_G) && defined(DISCRETE_RGB2_B) && \
       defined(DISCRETE_RGB3_R) && defined(DISCRETE_RGB3_G) && defined(DISCRETE_RGB3_B)
-    const uint8_t section = hue / 43;
-    const uint8_t offset = (hue - section * 43) * 6;
-    const uint8_t rising = offset;
-    const uint8_t falling = 255 - offset;
-    uint8_t red, green, blue;
+    const uint8_t section = (hue / 43) % 6;
+    uint8_t red = 0, green = 0, blue = 0;
     switch (section) {
-      case 0: red = 255; green = rising; blue = 0; break;
-      case 1: red = falling; green = 255; blue = 0; break;
-      case 2: red = 0; green = 255; blue = rising; break;
-      case 3: red = 0; green = falling; blue = 255; break;
-      case 4: red = rising; green = 0; blue = 255; break;
-      default: red = 255; green = 0; blue = falling; break;
+      case 0: red = 255; green = 0;   blue = 0;   break;
+      case 1: red = 255; green = 255; blue = 0;   break;
+      case 2: red = 0;   green = 255; blue = 0;   break;
+      case 3: red = 0;   green = 255; blue = 255; break;
+      case 4: red = 0;   green = 0;   blue = 255; break;
+      default:red = 255; green = 0;   blue = 255; break;
     }
     const uint8_t redPins[] = {DISCRETE_RGB1_R, DISCRETE_RGB2_R, DISCRETE_RGB3_R};
     const uint8_t greenPins[] = {DISCRETE_RGB1_G, DISCRETE_RGB2_G, DISCRETE_RGB3_G};
