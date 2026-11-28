@@ -403,6 +403,16 @@ function onMessage(event) {
         var volSlider = getId('volume');
         if (volSlider) { volSlider.max = data.maxVol; fillSlider(volSlider); }
       }
+      if (Array.isArray(data.slots)) {
+        data.slots.forEach((slot, i) => {
+          setupElement(`sched_s${i}_en`, slot.en);
+          setupElement(`sched_s${i}_pause`, slot.p);
+          setupElement(`sched_s${i}_resume`, slot.r);
+          for (let d = 0; d < 7; d++) {
+            setupElement(`sched_s${i}_d${d}`, (slot.d & (1 << d)) ? 1 : 0);
+          }
+        });
+      }
       Object.keys(data).forEach(key=>{
         // GETSCREEN also carries the theme id
         if (key === 'themeId') document.documentElement.setAttribute('data-theme', data[key]);
@@ -493,7 +503,7 @@ function setupElement(id,value){
     if(element.classList.contains("text")){
       element.innerText=value;
     }
-    if(element.type==='text' || element.type==='number' || element.type==='password'){
+    if(element.type==='text' || element.type==='number' || element.type==='password' || element.type==='time'){
       // battref is calibration, not ADC reference
       if (element.id !== 'battref') {
         element.value=value;
@@ -1609,7 +1619,7 @@ function continueLoading(mode){
             populateTZDropdown(timezoneData);
           }
           // this page request set, re-asked on open
-          wsSetPageBurst(['getsystem=1','getscreen=1','getscreensaver=1','getlocale=1','getweather=1','getmqtt=1',
+          wsSetPageBurst(['getsystem=1','getscreen=1','getscreensaver=1','getscheduler=1','getlocale=1','getweather=1','getmqtt=1',
                           'getcontrols=1','getactive=1','getbattery=1','getmute=1']);
           getWiFi(`http://${hostname}/data/wifi.csv`);
           wsRequestPageState();
@@ -1758,7 +1768,7 @@ function continueLoading(mode){
   });
   document.body.addEventListener('change', (event) => {
     const target = event.target;
-    if (target.tagName === 'SELECT') {
+    if (target.tagName === 'SELECT' || target.type === 'time') {
       const command = target.dataset.command;
       if (command) {
         websocket.send(`${command}=${target.value}`);

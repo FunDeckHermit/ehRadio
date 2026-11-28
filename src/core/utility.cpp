@@ -10,6 +10,7 @@
 #include <driver/rtc_io.h>
 #include "backlightcontrols.h"
 #include "config.h"
+#include "controls.h"
 #include "display.h"
 #include "netserver.h"
 #include "network.h"
@@ -138,6 +139,65 @@ void Utility::serviceSleep() {
   #ifndef DEEP_SLEEP_DISABLE
     if (what == 2) doSleep(); else doSleepW();
   #endif
+}
+
+void Utility::serviceScheduler() {
+  if (!config.store.sched_enabled) return;
+  if (!clockTrustworthy()) return;
+
+  struct tm nowTm;
+  if (!systemLocalTime(nowTm)) nowTm = network.timeinfo;
+
+  const int current_min = nowTm.tm_min;
+  const int current_hour = nowTm.tm_hour;
+  const int current_wday = nowTm.tm_wday; // 0=Sun, 1=Mon, ..., 6=Sat
+  const int current_time_min = current_hour * 60 + current_min;
+
+  static int8_t last_pause_min[SCHEDULER_SLOTS] = { -1, -1, -1, -1, -1 };
+  static int8_t last_resume_min[SCHEDULER_SLOTS] = { -1, -1, -1, -1, -1 };
+
+  for (int i = 0; i < SCHEDULER_SLOTS; i++) {
+    const auto& slot = config.store.sched_slots[i];
+    if (!slot.enabled) continue;
+
+    int pause_h = -1, pause_m = -1;
+    if (sscanf(slot.pause, "%d:%d", &pause_h, &pause_m) == 2 && pause_h >= 0 && pause_m >= 0) {
+      const int pause_time_min = pause_h * 60 + pause_m;
+      if (current_time_min != pause_time_min) {
+        last_pause_min[i] = -1;
+      } else if ((slot.days & (1 << current_wday)) && last_pause_min[i] != current_min) {
+        last_pause_min[i] = current_min;
+        if (player.isRunning()) {
+          FUNCTIONLOG("Scheduler", "Auto-pause triggered on slot %d at %02d:%02d", i + 1, current_hour, current_min);
+          network.cancelStreamRetry();
+          player.sendCommand({PR_STOP, 0});
+        }
+      }
+    }
+
+    int resume_h = -1, resume_m = -1;
+    if (sscanf(slot.resume, "%d:%d", &resume_h, &resume_m) == 2 && resume_h >= 0 && resume_m >= 0) {
+      const int resume_time_min = resume_h * 60 + resume_m;
+      if (current_time_min != resume_time_min) {
+        last_resume_min[i] = -1;
+      } else if ((slot.days & (1 << current_wday)) && last_resume_min[i] != current_min) {
+        last_resume_min[i] = current_min;
+        if (!player.isRunning()) {
+          FUNCTIONLOG("Scheduler", "Auto-resume triggered on slot %d at %02d:%02d", i + 1, current_hour, current_min);
+          controls.screenSaverExit();
+          if (config.getMode() == PM_WEB) {
+            if (!player.resumeLastWebSource()) {
+              if (config.store.countStation > 0) player.sendCommand({PR_PLAY, 1});
+              else if (config.lastStation() > 0) player.sendCommand({PR_PLAY, config.lastStation()});
+            }
+          } else {
+            const uint16_t stn = config.lastStation();
+            if (stn > 0) player.sendCommand({PR_PLAY, stn});
+          }
+        }
+      }
+    }
+  }
 }
 
 void Utility::doSleep() {

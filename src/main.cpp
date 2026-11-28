@@ -428,6 +428,7 @@ void loop() {
      the Ticker armed by sleepForAfter()) are esp_timer callbacks, and display.deepsleep() plus a telnet-capable log line
      do not belong on that task. */
   utility.serviceSleep();
+  utility.serviceScheduler();
   coredump::service();   // black box: archive the previous boot's crash once the clock can date it
 }
 

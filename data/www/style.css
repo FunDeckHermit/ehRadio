@@ -125,10 +125,10 @@ path#eh { fill: var(--logo); fill: url(#logo-gradient) #fff; stroke: var(--logo)
 path#radio { fill: var(--logo-text); stroke: var(--logo-text); stroke-width: 0.3px; filter: drop-shadow(1px 1px 0.8px rgba(0, 0, 0, .5)); }
 
 /* INPUTS */
-input[type=text], select[type=text], input[type=password], input[type=number] {
+input[type=text], select[type=text], input[type=password], input[type=number], input[type=time] {
   width: 100%; background: var(--input-fill); color: var(--input-text); border: var(--input-border) 1px solid; padding: 6px 12px; font-size: 20px; font-weight: normal; margin-top: 4px; border-radius: 4px; }
 select[type=text] { background: var(--select-fill); color: var(--select-text); }
-input[type=text]:focus, input[type=password]:focus, input[type=number]:focus { outline: none; }
+input[type=text]:focus, input[type=password]:focus, input[type=number]:focus, input[type=time]:focus { outline: none; }
 input[type=checkbox] { accent-color: var(--control-bg); width: 18px; height: 18px; cursor: pointer; vertical-align: middle; }
 input[type=checkbox]:disabled { cursor: default; opacity: 0.4; }
 input[type=radio] { accent-color: var(--control-bg); cursor: pointer; vertical-align: middle; }
@@ -339,6 +339,8 @@ section .reset svg.fill{ fill: var(--panel-border); stroke: none; width: 22px; }
 .inputwrap.center .inputtitle { text-align: center; }
 .inputtitle { display: inline-block; padding-bottom: 7px; }
 .ssoption { padding: 0.5em 0em 0.5em 0em; }
+.day-selector { flex-wrap: wrap; justify-content: center; gap: 8px 4px; }
+.day-selector .inputwrap { flex: 0 0 auto; min-width: 50px; margin: 4px 2px; }
 
 /* SEARCH */
 #searchheader, #curatedheader { width: 100%; position: relative; margin-bottom: 8px; min-height: 32px; }
@@ -603,7 +605,7 @@ body.sdman #progresstext.upload #progresspct { font-size: 200%; }
   #settingscontent section { padding: 12px 12px 20px 12px; }
   #settingscontent section .title span, #settingscontent .row-title span { font-size: 15px; }
   #settingscontent input[type=text], #settingscontent select[type=text],
-  #settingscontent input[type=password], #settingscontent input[type=number] { font-size: 16px; padding: 4px 8px; }
+  #settingscontent input[type=password], #settingscontent input[type=number], #settingscontent input[type=time] { font-size: 16px; padding: 4px 8px; }
   #settingscontent .fb { font-size: 13px; min-width: 64px; padding: 6px 4px; }
   .navigation { font-size: 13px; }
   /* Playlist editor */
@@ -637,7 +639,7 @@ body.sdman #progresstext.upload #progresspct { font-size: 200%; }
   #settingscontent section { padding: 24px 24px 34px 24px; }
   #settingscontent section .title span, #settingscontent .row-title span { font-size: 23px; }
   #settingscontent input[type=text], #settingscontent select[type=text],
-  #settingscontent input[type=password], #settingscontent input[type=number] { font-size: 25px; padding: 8px 14px; }
+  #settingscontent input[type=password], #settingscontent input[type=number], #settingscontent input[type=time] { font-size: 25px; padding: 8px 14px; }
   #settingscontent .fb { font-size: 20px; min-width: 100px; }
   .navigation { font-size: 20px; }
   #pleditorwrap h2 { font-size: 28px; }
@@ -672,7 +674,7 @@ body.sdman #progresstext.upload #progresspct { font-size: 200%; }
   #settingscontent section { padding: 28px 28px 38px 28px; }
   #settingscontent section .title span, #settingscontent .row-title span { font-size: 27px; }
   #settingscontent input[type=text], #settingscontent select[type=text],
-  #settingscontent input[type=password], #settingscontent input[type=number] { font-size: 30px; padding: 10px 16px; }
+  #settingscontent input[type=password], #settingscontent input[type=number], #settingscontent input[type=time] { font-size: 30px; padding: 10px 16px; }
   #settingscontent .fb { font-size: 24px; min-width: 120px; }
   .navigation { font-size: 24px; }
   #pleditorwrap h2 { font-size: 33px; }

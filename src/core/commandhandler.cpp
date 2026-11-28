@@ -37,7 +37,7 @@ bool CommandHandler::isBlockedForSource(const char *command, CommandSource sourc
 
   return cmdIs(command,
     "getindex", "getactive",
-    "getsystem", "getscreen", "getscreensaver", "getlocale", "getcontrols", "getweather", "getmqtt", "getbattery", "getmute",
+    "getsystem", "getscreen", "getscreensaver", "getlocale", "getcontrols", "getweather", "getmqtt", "getbattery", "getmute", "getscheduler",
     "curated_import", "loadindex", "loadplaylist",
     "newmode", "locale_webui", "plvalidate", "dBcut",
     "irbtn", "chkid", "irclr"
@@ -64,7 +64,7 @@ bool CommandHandler::exec(const char *command, const char *value, uint8_t cid, C
   if (playlistValidator.active() &&
       !cmdIs(command, "plvalidate",
              "getindex", "getactive", "getsystem", "getscreen", "getscreensaver", "getlocale",
-             "getweather", "getcontrols", "getmqtt", "getbattery", "getmute"))
+             "getweather", "getcontrols", "getmqtt", "getbattery", "getmute", "getscheduler"))
     return false;
 
   /* Websockets for Player */
@@ -155,6 +155,7 @@ bool CommandHandler::exec(const char *command, const char *value, uint8_t cid, C
   if (cmdIs(command, "getmqtt"))     { netserver.requestOnChange(GETMQTT, cid); return true; }
   if (cmdIs(command, "getbattery"))  { netserver.requestOnChange(GETBATTERY, cid); return true; }
   if (cmdIs(command, "getmute"))     { netserver.requestOnChange(MUTESTATE, cid); return true; }
+  if (cmdIs(command, "getscheduler")) { netserver.requestOnChange(GETSCHEDULER, cid); return true; }
 
   /* Options: Controls */
   if (cmdIs(command, "smartstart"))     { config.saveValue(&config.store.smartstart, static_cast<bool>(atoi(value))); return true; }
@@ -252,6 +253,77 @@ bool CommandHandler::exec(const char *command, const char *value, uint8_t cid, C
   if (cmdIs(command, "screensavervupeak"))         { config.saveValue(&config.store.screensaverVUpeak, static_cast<bool>(atoi(value))); screensaverHelper(); return true; }
   if (cmdIs(command, "sleeptimerenable"))          { config.saveValue(&config.store.sleeptimer, static_cast<bool>(atoi(value))); config.sleepTicks = 0; return true; }
   if (cmdIs(command, "sleeptimeout"))              { config.saveValue(&config.store.sleepSsTimeout, static_cast<uint16_t>(constrain(atoi(value), 5, 1080))); config.sleepTicks = 0; return true; }
+
+  /* Options: Scheduler */
+  if (cmdIs(command, "sched_en"))       { config.saveValue(&config.store.sched_enabled, static_cast<bool>(atoi(value))); return true; }
+  if (strncmp(command, "sched_s", 7) == 0 && strlen(command) >= 10) {
+    int slot = command[7] - '0';
+    if (slot >= 0 && slot < SCHEDULER_SLOTS) {
+      const char* sub = command + 8;
+      if (strcmp(sub, "_en") == 0) {
+        config.saveValue(&config.store.sched_slots[slot].enabled, static_cast<bool>(atoi(value)));
+        return true;
+      }
+      if (strcmp(sub, "_pause") == 0) {
+        int h = -1, m = -1;
+        if (sscanf(value, "%d:%d", &h, &m) == 2 && h >= 0 && h <= 23 && m >= 0 && m <= 59) {
+          char buf[6];
+          snprintf(buf, sizeof(buf), "%02d:%02d", h, m);
+          config.saveValue(config.store.sched_slots[slot].pause, buf);
+        } else if (strlen(value) == 0) {
+          config.saveValue(config.store.sched_slots[slot].pause, "");
+        }
+        return true;
+      }
+      if (strcmp(sub, "_resume") == 0) {
+        int h = -1, m = -1;
+        if (sscanf(value, "%d:%d", &h, &m) == 2 && h >= 0 && h <= 23 && m >= 0 && m <= 59) {
+          char buf[6];
+          snprintf(buf, sizeof(buf), "%02d:%02d", h, m);
+          config.saveValue(config.store.sched_slots[slot].resume, buf);
+        } else if (strlen(value) == 0) {
+          config.saveValue(config.store.sched_slots[slot].resume, "");
+        }
+        return true;
+      }
+      if (strncmp(sub, "_d", 2) == 0 && strlen(sub) == 3) {
+        int day = sub[2] - '0';
+        if (day >= 0 && day <= 6) {
+          if (atoi(value)) config.store.sched_slots[slot].days |= (1 << day);
+          else config.store.sched_slots[slot].days &= ~(1 << day);
+          config.saveValue(&config.store.sched_slots[slot].days, config.store.sched_slots[slot].days);
+          return true;
+        }
+      }
+    }
+  }
+  if (cmdIs(command, "sched_pause")) {
+    int h = -1, m = -1;
+    if (sscanf(value, "%d:%d", &h, &m) == 2 && h >= 0 && h <= 23 && m >= 0 && m <= 59) {
+      char buf[6];
+      snprintf(buf, sizeof(buf), "%02d:%02d", h, m);
+      config.saveValue(config.store.sched_slots[0].pause, buf);
+    }
+    return true;
+  }
+  if (cmdIs(command, "sched_resume")) {
+    int h = -1, m = -1;
+    if (sscanf(value, "%d:%d", &h, &m) == 2 && h >= 0 && h <= 23 && m >= 0 && m <= 59) {
+      char buf[6];
+      snprintf(buf, sizeof(buf), "%02d:%02d", h, m);
+      config.saveValue(config.store.sched_slots[0].resume, buf);
+    }
+    return true;
+  }
+  if (strncmp(command, "sched_d", 7) == 0 && strlen(command) == 8) {
+    int day = command[7] - '0';
+    if (day >= 0 && day <= 6) {
+      if (atoi(value)) config.store.sched_slots[0].days |= (1 << day);
+      else config.store.sched_slots[0].days &= ~(1 << day);
+      config.saveValue(&config.store.sched_slots[0].days, config.store.sched_slots[0].days);
+      return true;
+    }
+  }
 
   /* Options: Locale */
   if (cmdIs(command, "locale_webui")) { config.saveValue(config.store.locale_webui, value); return true; }

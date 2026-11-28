@@ -601,6 +601,17 @@ void Config::defaultSettings(const char *val, uint8_t clientId) {
     netserver.requestOnChange(GETBATTERY, clientId);
     return;
   }
+  if (strcmp(val, "scheduler") == 0) {
+    saveValue(&store.sched_enabled, (bool)SCHEDULER_ENABLE);
+    for (int i = 0; i < SCHEDULER_SLOTS; i++) {
+      saveValue(&store.sched_slots[i].enabled, i == 0 ? (bool)SCHEDULER_ENABLE : false);
+      saveValue(&store.sched_slots[i].days, (uint8_t)SCHEDULER_DAYS);
+      saveValue(store.sched_slots[i].pause, i == 0 ? SCHEDULER_PAUSE : "");
+      saveValue(store.sched_slots[i].resume, i == 0 ? SCHEDULER_RESUME : "");
+    }
+    netserver.requestOnChange(GETSCHEDULER, clientId);
+    return;
+  }
   if (strcmp(val, "1") == 0 || strcmp(val, "") == 0) {
     setDefaults();
     defaultSettings("controls", clientId);
@@ -609,6 +620,7 @@ void Config::defaultSettings(const char *val, uint8_t clientId) {
     defaultSettings("system", clientId);
     defaultSettings("mqtt", clientId);
     defaultSettings("battery", clientId);
+    defaultSettings("scheduler", clientId);
     defaultSettings("screensaver", clientId);
     defaultSettings("screen", clientId); // at the end to make sure screen doesn't break...
     return;
@@ -1149,6 +1161,28 @@ const configKeyMap Config::keyMap[] = {
   CONFIG_KEY_ENTRY(screensaverVUpeak, "scrnsvrvupeak"),
   CONFIG_KEY_ENTRY(sleeptimer, "sleeptimer"),
   CONFIG_KEY_ENTRY(sleepSsTimeout, "sleepsstimeout"),
+  // Scheduler
+  CONFIG_KEY_ENTRY(sched_enabled, "scheden"),
+  CONFIG_KEY_ENTRY(sched_slots[0].enabled, "sch_en0"),
+  CONFIG_KEY_ENTRY(sched_slots[0].days, "sch_d0"),
+  CONFIG_KEY_ENTRY(sched_slots[0].pause, "sch_p0"),
+  CONFIG_KEY_ENTRY(sched_slots[0].resume, "sch_r0"),
+  CONFIG_KEY_ENTRY(sched_slots[1].enabled, "sch_en1"),
+  CONFIG_KEY_ENTRY(sched_slots[1].days, "sch_d1"),
+  CONFIG_KEY_ENTRY(sched_slots[1].pause, "sch_p1"),
+  CONFIG_KEY_ENTRY(sched_slots[1].resume, "sch_r1"),
+  CONFIG_KEY_ENTRY(sched_slots[2].enabled, "sch_en2"),
+  CONFIG_KEY_ENTRY(sched_slots[2].days, "sch_d2"),
+  CONFIG_KEY_ENTRY(sched_slots[2].pause, "sch_p2"),
+  CONFIG_KEY_ENTRY(sched_slots[2].resume, "sch_r2"),
+  CONFIG_KEY_ENTRY(sched_slots[3].enabled, "sch_en3"),
+  CONFIG_KEY_ENTRY(sched_slots[3].days, "sch_d3"),
+  CONFIG_KEY_ENTRY(sched_slots[3].pause, "sch_p3"),
+  CONFIG_KEY_ENTRY(sched_slots[3].resume, "sch_r3"),
+  CONFIG_KEY_ENTRY(sched_slots[4].enabled, "sch_en4"),
+  CONFIG_KEY_ENTRY(sched_slots[4].days, "sch_d4"),
+  CONFIG_KEY_ENTRY(sched_slots[4].pause, "sch_p4"),
+  CONFIG_KEY_ENTRY(sched_slots[4].resume, "sch_r4"),
   // Locale
   CONFIG_KEY_ENTRY(locale_webui, "localewebui"),
   CONFIG_KEY_ENTRY(locale_display, "localedsp"),
@@ -1205,6 +1239,9 @@ void Config::deleteOldKeys() {
   prefs.remove("ircodes"); // replaced by the named per-button keys in the "ehradioir" namespace
   prefs.remove("softapdelay"); // SoftAP reboot delay removed: options.h SOFTAP_REBOOT_DELAY is the only control now
   prefs.remove("dspon"); // should never have been / it's a runtime-only state
+  prefs.remove("scheddays");
+  prefs.remove("schedpause");
+  prefs.remove("schedresume");
   // none yet
 }
 

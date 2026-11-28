@@ -134,6 +134,7 @@ public:
   static void requestSleep();
   static void requestSleepWake();
   void serviceSleep();
+  void serviceScheduler();
   void sleepForAfter(uint16_t sleepfor, uint16_t sa = 0);
   void stopStandby();
   void startStandby();

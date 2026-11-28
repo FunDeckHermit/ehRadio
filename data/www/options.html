@@ -5,6 +5,7 @@
       <div class="navitem group_controls hidden" data-target="group_controls" data-i18n="ttl_controls">Controls</div>
       <div class="navitem group_display hidden" data-target="group_display" data-i18n="ttl_screen">Screen</div>
       <div class="navitem group_display hidden" data-target="group_screensaver" data-i18n="ttl_screensaver">Screensaver</div>
+      <div class="navitem group_scheduler hidden" data-target="group_scheduler" data-i18n="ttl_scheduler">Scheduler</div>
       <div class="navitem group_locale hidden" data-target="group_locale" data-i18n="ttl_locale">Locale</div>
       <div class="navitem group_weather hidden" data-target="group_weather" data-i18n="ttl_weather">Weather</div>
       <div class="navitem group_system hidden" data-target="group_system" data-i18n="ttl_system">System</div>
@@ -267,6 +268,248 @@
             <div class="inputwrap center">
               <span class="inputtitle" data-i18n="lbl_timeout_min">Timeout (min)</span>
               <input type="number" id="scrtimeout" data-command="sleeptimeout" value="" maxlength="3" min="5" max="1080" />
+            </div>
+          </div>
+        </section>
+
+        <a name="scheduler"></a>
+        <section class="group_scheduler hidden" id="group_scheduler">
+          <div class="title"><span data-i18n="ttl_scheduler">Scheduler</span></div>
+          <div class="reset" data-name="scheduler" title="reset"></div>
+          <div class="flex-row">
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="lbl_sched_enable">Enable Scheduler</span>
+              <div class="checkbox" id="sched_en" data-command="sched_en"><div class="knob"></div></div>
+            </div>
+          </div>
+
+          <div class="row-title"><span data-i18n="ttl_sched_slot_1">Timeslot 1</span></div>
+          <div class="flex-row">
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="lbl_sched_slot_en">Enable Timeslot</span>
+              <div class="checkbox" id="sched_s0_en" data-command="sched_s0_en"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap">
+              <span class="inputtitle" data-i18n="lbl_sched_pause">Pause Time (HH:MM)</span>
+              <input type="time" id="sched_s0_pause" data-command="sched_s0_pause" />
+            </div>
+            <div class="inputwrap">
+              <span class="inputtitle" data-i18n="lbl_sched_resume">Resume Time (HH:MM)</span>
+              <input type="time" id="sched_s0_resume" data-command="sched_s0_resume" />
+            </div>
+          </div>
+          <div class="flex-row day-selector">
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_mon">Mon</span>
+              <div class="checkbox" id="sched_s0_d1" data-command="sched_s0_d1"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_tue">Tue</span>
+              <div class="checkbox" id="sched_s0_d2" data-command="sched_s0_d2"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_wed">Wed</span>
+              <div class="checkbox" id="sched_s0_d3" data-command="sched_s0_d3"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_thu">Thu</span>
+              <div class="checkbox" id="sched_s0_d4" data-command="sched_s0_d4"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_fri">Fri</span>
+              <div class="checkbox" id="sched_s0_d5" data-command="sched_s0_d5"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_sat">Sat</span>
+              <div class="checkbox" id="sched_s0_d6" data-command="sched_s0_d6"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_sun">Sun</span>
+              <div class="checkbox" id="sched_s0_d0" data-command="sched_s0_d0"><div class="knob"></div></div>
+            </div>
+          </div>
+
+          <div class="row-title"><span data-i18n="ttl_sched_slot_2">Timeslot 2</span></div>
+          <div class="flex-row">
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="lbl_sched_slot_en">Enable Timeslot</span>
+              <div class="checkbox" id="sched_s1_en" data-command="sched_s1_en"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap">
+              <span class="inputtitle" data-i18n="lbl_sched_pause">Pause Time (HH:MM)</span>
+              <input type="time" id="sched_s1_pause" data-command="sched_s1_pause" />
+            </div>
+            <div class="inputwrap">
+              <span class="inputtitle" data-i18n="lbl_sched_resume">Resume Time (HH:MM)</span>
+              <input type="time" id="sched_s1_resume" data-command="sched_s1_resume" />
+            </div>
+          </div>
+          <div class="flex-row day-selector">
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_mon">Mon</span>
+              <div class="checkbox" id="sched_s1_d1" data-command="sched_s1_d1"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_tue">Tue</span>
+              <div class="checkbox" id="sched_s1_d2" data-command="sched_s1_d2"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_wed">Wed</span>
+              <div class="checkbox" id="sched_s1_d3" data-command="sched_s1_d3"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_thu">Thu</span>
+              <div class="checkbox" id="sched_s1_d4" data-command="sched_s1_d4"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_fri">Fri</span>
+              <div class="checkbox" id="sched_s1_d5" data-command="sched_s1_d5"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_sat">Sat</span>
+              <div class="checkbox" id="sched_s1_d6" data-command="sched_s1_d6"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_sun">Sun</span>
+              <div class="checkbox" id="sched_s1_d0" data-command="sched_s1_d0"><div class="knob"></div></div>
+            </div>
+          </div>
+
+          <div class="row-title"><span data-i18n="ttl_sched_slot_3">Timeslot 3</span></div>
+          <div class="flex-row">
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="lbl_sched_slot_en">Enable Timeslot</span>
+              <div class="checkbox" id="sched_s2_en" data-command="sched_s2_en"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap">
+              <span class="inputtitle" data-i18n="lbl_sched_pause">Pause Time (HH:MM)</span>
+              <input type="time" id="sched_s2_pause" data-command="sched_s2_pause" />
+            </div>
+            <div class="inputwrap">
+              <span class="inputtitle" data-i18n="lbl_sched_resume">Resume Time (HH:MM)</span>
+              <input type="time" id="sched_s2_resume" data-command="sched_s2_resume" />
+            </div>
+          </div>
+          <div class="flex-row day-selector">
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_mon">Mon</span>
+              <div class="checkbox" id="sched_s2_d1" data-command="sched_s2_d1"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_tue">Tue</span>
+              <div class="checkbox" id="sched_s2_d2" data-command="sched_s2_d2"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_wed">Wed</span>
+              <div class="checkbox" id="sched_s2_d3" data-command="sched_s2_d3"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_thu">Thu</span>
+              <div class="checkbox" id="sched_s2_d4" data-command="sched_s2_d4"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_fri">Fri</span>
+              <div class="checkbox" id="sched_s2_d5" data-command="sched_s2_d5"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_sat">Sat</span>
+              <div class="checkbox" id="sched_s2_d6" data-command="sched_s2_d6"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_sun">Sun</span>
+              <div class="checkbox" id="sched_s2_d0" data-command="sched_s2_d0"><div class="knob"></div></div>
+            </div>
+          </div>
+
+          <div class="row-title"><span data-i18n="ttl_sched_slot_4">Timeslot 4</span></div>
+          <div class="flex-row">
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="lbl_sched_slot_en">Enable Timeslot</span>
+              <div class="checkbox" id="sched_s3_en" data-command="sched_s3_en"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap">
+              <span class="inputtitle" data-i18n="lbl_sched_pause">Pause Time (HH:MM)</span>
+              <input type="time" id="sched_s3_pause" data-command="sched_s3_pause" />
+            </div>
+            <div class="inputwrap">
+              <span class="inputtitle" data-i18n="lbl_sched_resume">Resume Time (HH:MM)</span>
+              <input type="time" id="sched_s3_resume" data-command="sched_s3_resume" />
+            </div>
+          </div>
+          <div class="flex-row day-selector">
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_mon">Mon</span>
+              <div class="checkbox" id="sched_s3_d1" data-command="sched_s3_d1"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_tue">Tue</span>
+              <div class="checkbox" id="sched_s3_d2" data-command="sched_s3_d2"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_wed">Wed</span>
+              <div class="checkbox" id="sched_s3_d3" data-command="sched_s3_d3"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_thu">Thu</span>
+              <div class="checkbox" id="sched_s3_d4" data-command="sched_s3_d4"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_fri">Fri</span>
+              <div class="checkbox" id="sched_s3_d5" data-command="sched_s3_d5"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_sat">Sat</span>
+              <div class="checkbox" id="sched_s3_d6" data-command="sched_s3_d6"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_sun">Sun</span>
+              <div class="checkbox" id="sched_s3_d0" data-command="sched_s3_d0"><div class="knob"></div></div>
+            </div>
+          </div>
+
+          <div class="row-title"><span data-i18n="ttl_sched_slot_5">Timeslot 5</span></div>
+          <div class="flex-row">
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="lbl_sched_slot_en">Enable Timeslot</span>
+              <div class="checkbox" id="sched_s4_en" data-command="sched_s4_en"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap">
+              <span class="inputtitle" data-i18n="lbl_sched_pause">Pause Time (HH:MM)</span>
+              <input type="time" id="sched_s4_pause" data-command="sched_s4_pause" />
+            </div>
+            <div class="inputwrap">
+              <span class="inputtitle" data-i18n="lbl_sched_resume">Resume Time (HH:MM)</span>
+              <input type="time" id="sched_s4_resume" data-command="sched_s4_resume" />
+            </div>
+          </div>
+          <div class="flex-row day-selector">
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_mon">Mon</span>
+              <div class="checkbox" id="sched_s4_d1" data-command="sched_s4_d1"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_tue">Tue</span>
+              <div class="checkbox" id="sched_s4_d2" data-command="sched_s4_d2"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_wed">Wed</span>
+              <div class="checkbox" id="sched_s4_d3" data-command="sched_s4_d3"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_thu">Thu</span>
+              <div class="checkbox" id="sched_s4_d4" data-command="sched_s4_d4"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_fri">Fri</span>
+              <div class="checkbox" id="sched_s4_d5" data-command="sched_s4_d5"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_sat">Sat</span>
+              <div class="checkbox" id="sched_s4_d6" data-command="sched_s4_d6"><div class="knob"></div></div>
+            </div>
+            <div class="inputwrap center">
+              <span class="inputtitle" data-i18n="day_sun">Sun</span>
+              <div class="checkbox" id="sched_s4_d0" data-command="sched_s4_d0"><div class="knob"></div></div>
             </div>
           </div>
         </section>

@@ -136,6 +136,13 @@ struct theme_t {
   uint16_t plcurrentbg;
   uint16_t playlist[5];
 };
+struct sched_slot_t {
+  bool enabled;
+  uint8_t days;
+  char pause[6];
+  char resume[6];
+};
+
 struct config_t // specify defaults here (and macros in options.h) (defaults are NOT saved to Prefs)
 {
   // Internal / player state
@@ -203,6 +210,16 @@ struct config_t // specify defaults here (and macros in options.h) (defaults are
   bool      screensaverVUpeak = SS_VUPEAK;
   bool      sleeptimer = SS_SLEEPTIMER;
   uint16_t  sleepSsTimeout = SS_SLEEPTIME;
+
+  // Scheduler
+  bool          sched_enabled = SCHEDULER_ENABLE;
+  sched_slot_t  sched_slots[SCHEDULER_SLOTS] = {
+    { SCHEDULER_ENABLE, SCHEDULER_DAYS, SCHEDULER_PAUSE, SCHEDULER_RESUME },
+    { false, SCHEDULER_DAYS, "", "" },
+    { false, SCHEDULER_DAYS, "", "" },
+    { false, SCHEDULER_DAYS, "", "" },
+    { false, SCHEDULER_DAYS, "", "" }
+  };
 
   // Locale
   char      locale_webui[6] = WEBUI_LOCALE;

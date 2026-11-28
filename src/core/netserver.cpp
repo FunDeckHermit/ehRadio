@@ -627,6 +627,7 @@ void NetServer::processQueue() {
             if (presentOf(*weatherConf_ptr) || DBGWUI)          { act += F("\"group_weather\","); }
                                                            else { act += F("\"hide_group_weather\","); }
                                                                 act += F("\"group_controls\",");
+                                                                act += F("\"group_scheduler\",");
             if ((DSP_MODEL != DSP_DUMMY && (BTN_NEXT != 255 || BTN_PREV != 255)) || DBGWUI)
                                                                 act += F("\"group_stnbuttons\",");
             if (ENC_DT != 255 || ENC2_DT != 255 || DBGWUI)      act += F("\"group_encoder\",");
@@ -704,6 +705,21 @@ void NetServer::processQueue() {
                                   config.store.screensaverVUpeak,
                                   config.store.sleeptimer,
                                   config.store.sleepSsTimeout);
+                                  break;
+      case GETSCHEDULER:   snprintf(wsbuf, sizeof(wsbuf),
+                                  "{\"sched_en\":%d,\"slots\":["
+                                  "{\"en\":%d,\"p\":\"%s\",\"r\":\"%s\",\"d\":%u},"
+                                  "{\"en\":%d,\"p\":\"%s\",\"r\":\"%s\",\"d\":%u},"
+                                  "{\"en\":%d,\"p\":\"%s\",\"r\":\"%s\",\"d\":%u},"
+                                  "{\"en\":%d,\"p\":\"%s\",\"r\":\"%s\",\"d\":%u},"
+                                  "{\"en\":%d,\"p\":\"%s\",\"r\":\"%s\",\"d\":%u}"
+                                  "]}",
+                                  config.store.sched_enabled,
+                                  config.store.sched_slots[0].enabled, config.store.sched_slots[0].pause, config.store.sched_slots[0].resume, (unsigned)config.store.sched_slots[0].days,
+                                  config.store.sched_slots[1].enabled, config.store.sched_slots[1].pause, config.store.sched_slots[1].resume, (unsigned)config.store.sched_slots[1].days,
+                                  config.store.sched_slots[2].enabled, config.store.sched_slots[2].pause, config.store.sched_slots[2].resume, (unsigned)config.store.sched_slots[2].days,
+                                  config.store.sched_slots[3].enabled, config.store.sched_slots[3].pause, config.store.sched_slots[3].resume, (unsigned)config.store.sched_slots[3].days,
+                                  config.store.sched_slots[4].enabled, config.store.sched_slots[4].pause, config.store.sched_slots[4].resume, (unsigned)config.store.sched_slots[4].days);
                                   break;
       case GETLOCALE:     snprintf(wsbuf, sizeof(wsbuf), "{\"locale_webui\":\"%s\",\"locale_disp\":\"%s\",\"tz_name\":\"%s\",\"tzposix\":\"%s\",\"sntp1\":\"%s\",\"sntp2\":\"%s\",\"timeinterval\":%d}",
                                   config.store.locale_webui,

@@ -1530,6 +1530,23 @@ or examine the examples in builds/trip5 and make your own!
   #define SS_SLEEPTIME 30
 #endif
 
+/* --- Scheduler --- */
+#ifndef SCHEDULER_ENABLE
+  #define SCHEDULER_ENABLE false
+#endif
+#ifndef SCHEDULER_SLOTS
+  #define SCHEDULER_SLOTS 5
+#endif
+#ifndef SCHEDULER_PAUSE
+  #define SCHEDULER_PAUSE "22:00"
+#endif
+#ifndef SCHEDULER_RESUME
+  #define SCHEDULER_RESUME "08:00"
+#endif
+#ifndef SCHEDULER_DAYS
+  #define SCHEDULER_DAYS 0x7F
+#endif
+
 /* --- Locale --- */
 // The Display Locale is changeable!  (Check locale/dsplocales.json for full list)
 #ifndef DSP_LOCALE
