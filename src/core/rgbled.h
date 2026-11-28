@@ -35,11 +35,11 @@ private:
   bool stationAnimationActive;
   uint16_t animationStationId;
   uint16_t lastStationId;
-  uint8_t animationHue;
+  uint8_t animationColors[3];
   unsigned long stationAnimationStart;
   unsigned long lastAnimationChange;
   void setStationColors(uint16_t stationId);
-  void setAnimationColor(uint8_t hue);
+  void setAnimationColors(uint8_t c0, uint8_t c1, uint8_t c2);
 };
 
 #else

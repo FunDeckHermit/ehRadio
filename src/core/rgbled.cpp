@@ -12,7 +12,7 @@ RgbLed::RgbLed()
   : strip(NUM_RGB_LEDS, RGB_LED_PIN, RGB_LED_ORDER + NEO_KHZ800),
     flashCount(0), lastFlash(0), inited(false),
     cycle(false), lastCycle(0), cycleState(0), state(RGB_OFF),
-    stationAnimationActive(false), animationStationId(0), lastStationId(0), animationHue(0),
+    stationAnimationActive(false), animationStationId(0), lastStationId(0), animationColors{0, 0, 0},
     stationAnimationStart(0), lastAnimationChange(0) {}
 
 void RgbLed::init() {
@@ -52,8 +52,14 @@ void RgbLed::playing(uint16_t stationId) {
       stationAnimationActive = true;
       stationAnimationStart = millis();
       lastAnimationChange = stationAnimationStart;
-      animationHue = (uint8_t)random(256);
-      setAnimationColor(animationHue);
+      animationColors[0] = (uint8_t)random(6);
+      do {
+        animationColors[1] = (uint8_t)random(6);
+      } while (animationColors[1] == animationColors[0]);
+      do {
+        animationColors[2] = (uint8_t)random(6);
+      } while (animationColors[2] == animationColors[0] || animationColors[2] == animationColors[1]);
+      setAnimationColors(animationColors[0], animationColors[1], animationColors[2]);
     } else if (!stationAnimationActive) setStationColors(stationId);
   }
   else {
@@ -117,30 +123,24 @@ void RgbLed::setStationColors(uint16_t stationId) {
   #endif
 }
 
-void RgbLed::setAnimationColor(uint8_t hue) {
+void RgbLed::setAnimationColors(uint8_t c0, uint8_t c1, uint8_t c2) {
   #if defined(DISCRETE_RGB1_R) && defined(DISCRETE_RGB1_G) && defined(DISCRETE_RGB1_B) && \
       defined(DISCRETE_RGB2_R) && defined(DISCRETE_RGB2_G) && defined(DISCRETE_RGB2_B) && \
       defined(DISCRETE_RGB3_R) && defined(DISCRETE_RGB3_G) && defined(DISCRETE_RGB3_B)
-    const uint8_t section = (hue / 43) % 6;
-    uint8_t red = 0, green = 0, blue = 0;
-    switch (section) {
-      case 0: red = 255; green = 0;   blue = 0;   break;
-      case 1: red = 255; green = 255; blue = 0;   break;
-      case 2: red = 0;   green = 255; blue = 0;   break;
-      case 3: red = 0;   green = 255; blue = 255; break;
-      case 4: red = 0;   green = 0;   blue = 255; break;
-      default:red = 255; green = 0;   blue = 255; break;
-    }
-    const uint8_t redPins[] = {DISCRETE_RGB1_R, DISCRETE_RGB2_R, DISCRETE_RGB3_R};
+    const uint8_t redPins[]   = {DISCRETE_RGB1_R, DISCRETE_RGB2_R, DISCRETE_RGB3_R};
     const uint8_t greenPins[] = {DISCRETE_RGB1_G, DISCRETE_RGB2_G, DISCRETE_RGB3_G};
-    const uint8_t bluePins[] = {DISCRETE_RGB1_B, DISCRETE_RGB2_B, DISCRETE_RGB3_B};
+    const uint8_t bluePins[]  = {DISCRETE_RGB1_B, DISCRETE_RGB2_B, DISCRETE_RGB3_B};
+    const uint8_t colors[]    = {(uint8_t)(c0 % 6), (uint8_t)(c1 % 6), (uint8_t)(c2 % 6)};
+    const uint8_t red[]   = {255, 255, 0,   0,   0,   255};
+    const uint8_t green[] = {0,   255, 255, 255, 0,   0};
+    const uint8_t blue[]  = {0,   0,   0,   255, 255, 255};
     for (uint8_t led = 0; led < 3; led++) {
-      writeDiscreteRgb(redPins[led], red);
-      writeDiscreteRgb(greenPins[led], green);
-      writeDiscreteRgb(bluePins[led], blue);
+      writeDiscreteRgb(redPins[led], red[colors[led]]);
+      writeDiscreteRgb(greenPins[led], green[colors[led]]);
+      writeDiscreteRgb(bluePins[led], blue[colors[led]]);
     }
   #else
-    (void)hue;
+    (void)c0; (void)c1; (void)c2;
   #endif
 }
 
@@ -157,15 +157,18 @@ void RgbLed::loop() {
       stationAnimationActive = false;
       setStationColors(animationStationId);
     } else if (now - lastAnimationChange >= 100UL) {
-      uint8_t nextHue;
-      uint8_t distance;
+      uint8_t next0, next1, next2;
+      const uint8_t offsets[] = {2, 3, 4};
       do {
-        nextHue = (uint8_t)random(256);
-        distance = (uint8_t)(nextHue - animationHue);
-      } while (distance < 64 || distance > 192);
-      animationHue = nextHue;
+        next0 = (animationColors[0] + offsets[random(3)]) % 6;
+        next1 = (animationColors[1] + offsets[random(3)]) % 6;
+        next2 = (animationColors[2] + offsets[random(3)]) % 6;
+      } while (next0 == next1 || next1 == next2 || next0 == next2);
+      animationColors[0] = next0;
+      animationColors[1] = next1;
+      animationColors[2] = next2;
       lastAnimationChange = now;
-      setAnimationColor(animationHue);
+      setAnimationColors(animationColors[0], animationColors[1], animationColors[2]);
     }
   }
 
